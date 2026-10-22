@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Booking confirmed{% endblock %}
+{% block content %}
+<ol class="steps"><li class="is-done">Choose room</li><li class="is-done">Guest details</li><li class="is-done">Confirmed</li></ol>
+<section class="panel done">
+  <div class="check" aria-hidden="true">✓</div>
+  <h2>Booking confirmed</h2>
+  <p class="muted">Booking number {{ b.id }}. Keep this for check-in.</p>
+  <dl class="rows">
+    <dt>Guest</dt><dd>{{ b.customer_name }}</dd>
+    <dt>Room</dt><dd>{{ b.room_number }}, {{ b.room_type }}</dd>
+    <dt>Check-in</dt><dd>{{ b.check_in|pretty_date }}</dd>
+    <dt>Check-out</dt><dd>{{ b.check_out|pretty_date }}</dd>
+    <dt>Nights</dt><dd>{{ b.nights }}</dd>
+    <dt>Total</dt><dd class="total">{{ b.total|inr }}</dd>
+  </dl>
+  <a class="btn" href="{{ url_for('index') }}">Back to rooms</a>
+</section>
+{% endblock %}

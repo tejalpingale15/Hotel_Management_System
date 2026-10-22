@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Book room {{ room.room_number }}{% endblock %}
+{% block content %}
+<ol class="steps"><li class="is-done">Choose room</li><li class="is-now">Guest details</li><li class="">Confirmed</li></ol>
+<div class="split">
+  <article class="tag">
+    <div class="tag-head t-{{ room.room_type|lower|replace(' ', '-') }}">
+      <div class="tag-num">{{ room.room_number }}</div>
+      <div class="tag-type">{{ room.room_type }} room</div>
+    </div>
+    <div class="tag-body"><div class="price">{{ room.price|inr }} <small>per night</small></div></div>
+  </article>
+  <section class="panel">
+    <h2>Guest details</h2>
+    <form method="post" class="stack">
+      <label>Full name <input name="name" value="{{ form.name }}" required></label>
+      <div class="two">
+        <label>Email <input name="email" type="email" value="{{ form.email }}" required></label>
+        <label>Phone <input name="phone" type="tel" value="{{ form.phone }}" required></label>
+      </div>
+      <div class="two">
+        <label>Check-in <input id="checkin" name="checkin" type="date" min="{{ today }}" value="{{ form.checkin }}" required></label>
+        <label>Check-out <input id="checkout" name="checkout" type="date" min="{{ today }}" value="{{ form.checkout }}" required></label>
+      </div>
+      <div id="estimate" class="estimate" data-price="{{ room.price }}">Choose your dates to see the total.</div>
+      <div class="actions">
+        <button class="btn" type="submit">Confirm booking</button>
+        <a class="btn ghost" href="{{ url_for('room_detail', room_id=room.id) }}">Cancel</a>
+      </div>
+    </form>
+  </section>
+</div>
+<script>
+(function () {
+  var ci = document.getElementById('checkin'), co = document.getElementById('checkout');
+  var out = document.getElementById('estimate'), price = parseFloat(out.dataset.price);
+  function update() {
+    if (!ci.value || !co.value) { out.textContent = 'Choose your dates to see the total.'; return; }
+    var n = Math.round((new Date(co.value) - new Date(ci.value)) / 86400000);
+    out.textContent = n > 0
+      ? n + (n === 1 ? ' night' : ' nights') + ' × ₹' + price.toLocaleString('en-IN') + ' = ₹' + (n * price).toLocaleString('en-IN')
+      : 'Check-out must be after check-in.';
+  }
+  ci.addEventListener('change', update); co.addEventListener('change', update); update();
+})();
+</script>
+{% endblock %}

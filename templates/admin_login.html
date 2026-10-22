@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Admin login{% endblock %}
+{% block content %}
+<section class="login">
+  <div class="login-side">
+    <div class="brand-mark">H</div>
+    <h2>Welcome back</h2>
+    <p>Log in to manage rooms, bookings and check-outs.</p>
+  </div>
+  <form method="post" class="stack">
+    <h3>Admin login</h3>
+    <label>Username <input name="username" autocomplete="username" required></label>
+    <label>Password <input name="password" type="password" autocomplete="current-password" required></label>
+    <button class="btn" type="submit">Log in</button>
+  </form>
+</section>
+{% endblock %}

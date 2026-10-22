@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Add room{% endblock %}
+{% block content %}
+<section class="panel narrow">
+  <h2>Add room</h2>
+  <form method="post" class="stack">
+    <label>Room number <input name="number" required></label>
+    <label>Room type
+      <select name="rtype">{% for t in types %}<option>{{ t }}</option>{% endfor %}</select>
+    </label>
+    <label>Price per night (₹) <input name="price" type="number" min="1" step="1" required></label>
+    <label>Status
+      <select name="status"><option value="available">Available</option><option value="booked">Booked</option></select>
+    </label>
+    <div class="actions"><button class="btn" type="submit">Add room</button><a class="btn ghost" href="{{ url_for('admin_rooms') }}">Cancel</a></div>
+  </form>
+</section>
+{% endblock %}

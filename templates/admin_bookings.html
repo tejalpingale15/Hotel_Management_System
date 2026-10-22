@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Bookings{% endblock %}
+{% block content %}
+<div class="page-title"><h2>Bookings</h2><p class="sub">Every stay, newest first. Check guests out here.</p></div>
+<div class="table-wrap">
+  <table>
+    <tr><th>No.</th><th>Guest</th><th>Room</th><th>Stay</th><th>Total</th><th>Status</th><th></th></tr>
+    {% for b in bookings %}
+    <tr>
+      <td>{{ b.id }}</td>
+      <td>{{ b.customer_name }}<br><small>{{ b.customer_email }}<br>{{ b.customer_phone }}</small></td>
+      <td>{{ b.room_number }}, {{ b.room_type }}</td>
+      <td>{{ b.check_in|pretty_date }} to {{ b.check_out|pretty_date }}<br><small>{{ b.nights }} {{ 'night' if b.nights == 1 else 'nights' }}</small></td>
+      <td>{{ b.total|inr }}</td>
+      <td>{% if b.status == 'active' %}<span class="badge warn">Checked in</span>{% else %}<span class="badge muted">Checked out</span>{% endif %}</td>
+      <td>{% if b.status == 'active' %}
+        <form method="post" action="{{ url_for('checkout_booking', booking_id=b.id) }}"><button class="btn ghost small" type="submit">Check out</button></form>{% endif %}</td>
+    </tr>
+    {% else %}<tr><td colspan="7" class="empty">No bookings yet.</td></tr>{% endfor %}
+  </table>
+</div>
+{% endblock %}

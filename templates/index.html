@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block hero %}
+<section class="hero">
+  <div class="wrap">
+    <h1>Find a room and book it in a minute.</h1>
+    <p>{{ free_rooms }} of {{ total_rooms }} rooms are free right now. Pick a room type to narrow the list.</p>
+    <div class="chips">
+      <a class="chip{% if not rtype %} on{% endif %}" href="{{ url_for('index') }}">All rooms</a>
+      {% for t in types %}<a class="chip{% if rtype == t %} on{% endif %}" href="{{ url_for('index', type=t) }}">{{ t }}</a>{% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}
+{% block content %}
+{% if rooms %}
+<div class="section-title"><h2>{{ rtype or 'All' }} rooms</h2><span class="muted">{{ rooms|length }} available</span></div>
+<div class="grid">
+  {% for r in rooms %}
+  <article class="tag">
+    <div class="tag-head t-{{ r.room_type|lower|replace(' ', '-') }}">
+      <span class="tag-flag">Free</span>
+      <div class="tag-num">{{ r.room_number }}</div>
+      <div class="tag-type">{{ r.room_type }} room</div>
+    </div>
+    <div class="tag-body">
+      <div class="price">{{ r.price|inr }} <small>per night</small></div>
+      <p class="perks">{{ amenities(r.room_type)[:2]|join(', ') }}</p>
+      <a class="btn" href="{{ url_for('room_detail', room_id=r.id) }}">View and book</a>
+    </div>
+  </article>
+  {% endfor %}
+</div>
+{% else %}
+<div class="panel empty">
+  <h3>No {{ rtype|lower }} rooms are free right now.</h3>
+  <a class="btn" href="{{ url_for('index') }}">Show all rooms</a>
+</div>
+{% endif %}
+{% endblock %}

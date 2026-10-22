@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Room {{ room.room_number }}{% endblock %}
+{% block content %}
+<ol class="steps"><li class="is-now">Choose room</li><li class="">Guest details</li><li class="">Confirmed</li></ol>
+<div class="split">
+  <article class="tag big">
+    <div class="tag-head t-{{ room.room_type|lower|replace(' ', '-') }}">
+      <div class="tag-num">{{ room.room_number }}</div>
+      <div class="tag-type">{{ room.room_type }} room</div>
+    </div>
+  </article>
+  <section class="panel">
+    <h2>{{ room.room_type }} room {{ room.room_number }}</h2>
+    <p class="price">{{ room.price|inr }} <small>per night</small></p>
+    <p>{% if room.status == 'available' %}<span class="badge ok">Available</span>{% else %}<span class="badge warn">Booked</span>{% endif %}</p>
+    <ul class="perk-list">{% for a in amenities(room.room_type) %}<li>{{ a }}</li>{% endfor %}</ul>
+    <div class="actions">
+      {% if room.status == 'available' %}<a class="btn" href="{{ url_for('book_room', room_id=room.id) }}">Book this room</a>
+      {% else %}<a class="btn" aria-disabled="true">Not available</a>{% endif %}
+      <a class="btn ghost" href="{{ url_for('index') }}">Back to rooms</a>
+    </div>
+  </section>
+</div>
+{% endblock %}

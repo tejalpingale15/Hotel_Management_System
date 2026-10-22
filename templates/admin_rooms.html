@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Manage rooms{% endblock %}
+{% block content %}
+<div class="head-row"><div class="page-title" style="margin:0"><h2>Rooms</h2><p class="sub">Add, review and remove rooms.</p></div><a class="btn" href="{{ url_for('add_room') }}">Add room</a></div>
+<div class="table-wrap">
+  <table>
+    <tr><th>Room</th><th>Type</th><th>Price per night</th><th>Status</th><th></th></tr>
+    {% for r in rooms %}
+    <tr>
+      <td><b>{{ r.room_number }}</b></td><td>{{ r.room_type }}</td><td>{{ r.price|inr }}</td>
+      <td>{% if r.status == 'available' %}<span class="badge ok">Available</span>{% else %}<span class="badge warn">Booked</span>{% endif %}</td>
+      <td>{% if r.status == 'available' %}
+        <form method="post" action="{{ url_for('delete_room', room_id=r.id) }}" onsubmit="return confirm('Delete room {{ r.room_number }}?')">
+          <button class="btn danger small" type="submit">Delete</button></form>{% endif %}</td>
+    </tr>
+    {% else %}<tr><td colspan="5" class="empty">No rooms yet. Add your first room.</td></tr>{% endfor %}
+  </table>
+</div>
+{% endblock %}
